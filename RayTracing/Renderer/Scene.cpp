@@ -4,10 +4,10 @@
 
 Scene::Scene()
 {
-	mCamera = Camera::Create(Config::sAspectRatio);
+	mCamera = Camera::Create(Config::sAspectRatio, 90.0f, glm::vec3(-2.0f, 2.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	auto&& materialGround = Lambertian({ 0.8f, 0.8f, 0.0f });
-	auto&& materialCenter = Lambertian({ 0.7f, 0.3f, 0.3f });
+	auto&& materialCenter = Lambertian({ 0.1f, 0.2f, 0.5f });
 	auto&& materialLeft1 = Dielectric(1.5f);
 	auto&& materialLeft2 = Dielectric(1.5f);
 	auto&& materialRight = Metal({ 0.8f, 0.6f, 0.2f }, 0.0f);
