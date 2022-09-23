@@ -13,7 +13,12 @@ bool Sphere::Hit(LightRay& r) const
 	f32 a = glm::dot(r.Direction, r.Direction);
 	f32 halfB = glm::dot(r.Direction, sc);
 	f32 c = glm::dot(sc, sc) - mRadius * mRadius;
-	f32 d = halfB * halfB - a * c; 
+	
+	if (f32 d = halfB * halfB - a * c; d > 0.0f)
+	{
+		r.Root = (-halfB - glm::sqrt(d)) / a;
+		return true;
+	}
 
-	return d > 0.0f;
+	return false;
 }

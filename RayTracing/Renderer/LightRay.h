@@ -14,4 +14,6 @@ public:
 public:
 	glm::vec3 StartPos;
 	glm::vec3 Direction;
+
+	f32 Root;
 };
