@@ -3,20 +3,42 @@
 #include "Core/Config.h"
 
 Scene::Scene()
-	:
-	mSphere({ 0.0f, 0.0f, -1.0f }, 0.5f)
 {
 	mCamera = Camera::Create(Config::sAspectRatio);
+
+	AddObj(Sphere({ 0.0f, 0.0f, -1.0f }, 0.5f));
+	AddObj(Sphere({ 0.0f, -100.5f, -1.0f }, 100.0f));
+}
+
+void Scene::AddObj(HittableObjects&& obj)
+{
+	mObjects.emplace_back(std::move(obj));
+}
+
+bool Scene::Hit(LightRay& r) const
+{
+	bool IsAnythingHit = false;
+
+	r.MaxRoot = INF;
+
+	for (const auto& el : mObjects)
+	{
+		if (std::visit([&](const auto& object) { return object.Hit(r); }, el))
+		{
+			IsAnythingHit = true;
+		}
+	}
+
+	return IsAnythingHit;
 }
 
 glm::vec3 Scene::ShootRay(f32 u, f32 v) const
 {
 	LightRay r = mCamera->GetRay(u, v);
 
-	if (mSphere.Hit(r))
+	if (Hit(r))
 	{
-		glm::vec3 normal = glm::normalize(r.At(r.Root) - glm::vec3(0.0f, 0.0f, -1.0f));
-		return 0.5f * glm::vec3(normal.x + 1.0f, normal.y + 1.0f, normal.z + 1.0f);
+		return 0.5f * (r.HitNormal + 1.0f);
 	}
 
 	glm::vec3 unitDir = glm::normalize(r.Direction);

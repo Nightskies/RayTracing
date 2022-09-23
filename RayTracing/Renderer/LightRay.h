@@ -11,9 +11,14 @@ public:
 
 	glm::vec3 At(f32 t) const { return StartPos + t * Direction; }
 
+	void SetFaceNormal();
 public:
 	glm::vec3 StartPos;
 	glm::vec3 Direction;
 
-	f32 Root;
+	glm::vec3 HitPos;
+	glm::vec3 HitNormal;
+	f32 MinRoot = 0.001f;
+	f32 MaxRoot = INF;
+	bool FrontFace;
 };

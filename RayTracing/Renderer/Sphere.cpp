@@ -16,9 +16,24 @@ bool Sphere::Hit(LightRay& r) const
 	
 	if (f32 d = halfB * halfB - a * c; d > 0.0f)
 	{
-		r.Root = (-halfB - glm::sqrt(d)) / a;
+		f32 t = (-halfB - glm::sqrt(d)) / a;
+		if (t < r.MinRoot || t > r.MaxRoot)
+		{
+			if (t = (-halfB + glm::sqrt(d)) / a; t < r.MinRoot || t > r.MaxRoot)
+			{
+				return false;
+			}
+		}
+
+		r.MaxRoot = t;
+		r.HitPos = r.At(r.MaxRoot);
+		r.HitNormal = (r.HitPos - mCenter) / mRadius;
+		r.SetFaceNormal();
+
 		return true;
 	}
-
-	return false;
+	else
+	{
+		return false;
+	}
 }
