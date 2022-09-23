@@ -4,22 +4,53 @@
 
 Scene::Scene()
 {
-	glm::vec3 lookfrom = { 3.0f, 3.0f, 2.0f };
-	glm::vec3 lookat = { 0.0f, 0.0f, -1.0f };
-	f32 focusDist = glm::length(lookfrom - lookat);
-	mCamera = Camera::Create(Config::sAspectRatio, 20.0f, focusDist, 2.0f, lookfrom, lookat, glm::vec3(0.0f, 1.0f, 0.0f));
+	mCamera = Camera::Create(Config::sAspectRatio, 20.0f, 10.f, 0.1f, glm::vec3(13.0f, 2.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	auto&& materialGround = Lambertian({ 0.8f, 0.8f, 0.0f });
-	auto&& materialCenter = Lambertian({ 0.1f, 0.2f, 0.5f });
-	auto&& materialLeft1 = Dielectric(1.5f);
-	auto&& materialLeft2 = Dielectric(1.5f);
-	auto&& materialRight = Metal({ 0.8f, 0.6f, 0.2f }, 0.0f);
+	auto&& groundMaterial = Lambertian({ 0.5f, 0.5f, 0.5f });
+	AddObj(Sphere({ 0.0f, -1000.0f, 0.0f }, 1000.0f, std::move(groundMaterial)));
 
-	AddObj(Sphere({ 0.0f, 0.0f, -1.0f }, 0.5f, std::move(materialCenter)));
-	AddObj(Sphere({ 0.0f, -100.5f, -1.0f }, 100.0f, std::move(materialGround)));
-	AddObj(Sphere({ -1.0f, 0.0f, -1.0f }, 0.5f, std::move(materialLeft1)));
-	AddObj(Sphere({ -1.0f, 0.0f, -1.0f }, -0.4f, std::move(materialLeft2)));
-	AddObj(Sphere({ 1.0f, 0.0f, -1.0f }, 0.5f, std::move(materialRight)));
+	for (s32 a = -11; a < 11; a++)
+	{
+		for (s32 b = -11; b < 11; b++)
+		{
+			auto chooseMat = Utils::random();
+			glm::vec3 center(a + 0.9f * Utils::random(), 0.2f, b + 0.9f * Utils::random());
+
+			if (glm::length((center - glm::vec3(4.0f, 0.2f, 0.0f))) > 0.9f)
+			{
+				if (chooseMat < 0.8)
+				{
+					// diffuse
+					auto albedo = Utils::get_random_vector() * Utils::get_random_vector();
+					auto&& sphereMaterial = Lambertian(albedo);
+					AddObj(Sphere(center, 0.2f, std::move(sphereMaterial)));
+				}
+				else if (chooseMat < 0.95)
+				{
+					// metal
+					auto albedo = Utils::get_random_vector(0.5f, 1.0f);
+					auto fuzz = Utils::random(0.0f, 0.5f);
+					auto&& sphereMaterial = Metal(albedo, fuzz);
+					AddObj(Sphere(center, 0.2f, std::move(sphereMaterial)));
+				}
+				else
+				{
+					// glass
+					auto&& sphereMaterial = Dielectric(1.5f);
+					AddObj(Sphere(center, 0.2f, std::move(sphereMaterial)));
+				}
+			}
+		}
+	}
+
+	auto&& material1 = Dielectric(1.5f);
+	AddObj(Sphere({ 0.0f, 1.0f, 0.0f }, 1.0f, std::move(material1)));
+
+	auto&& material2 = Lambertian({ 0.4f, 0.2f, 0.1f });
+	AddObj(Sphere({ -4.0f, 1.0f, 0.0f }, 1.0f, std::move(material2)));
+
+	auto&& material3 = Metal({ 0.7f, 0.6f, 0.5f }, 0.0f);
+	AddObj(Sphere({ 4.0f, 1.0f, 0.0f }, 1.0f, std::move(material3)));
 }
 
 void Scene::AddObj(HittableObjects&& obj)
