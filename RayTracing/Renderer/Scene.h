@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-//#include "Core/Config.h"
+#include "Sphere.h"
 
 class Scene
 {
@@ -12,5 +12,6 @@ public:
 	static UPtr<Scene> Create() { return std::make_unique<Scene>(); }
 private:
 	UPtr<Camera> mCamera;
-};
 
+	Sphere mSphere;
+};

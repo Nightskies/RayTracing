@@ -1,6 +1,4 @@
 #pragma once
-#include "Core/Types.h"
-
 #include "LightRay.h"
 
 class Camera
