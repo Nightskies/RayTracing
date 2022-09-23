@@ -8,12 +8,14 @@ Scene::Scene()
 
 	auto&& materialGround = Lambertian({ 0.8f, 0.8f, 0.0f });
 	auto&& materialCenter = Lambertian({ 0.7f, 0.3f, 0.3f });
-	auto&& materialLeft = Metal({ 0.8f, 0.8f, 0.8f }, 0.3f);
-	auto&& materialRight = Metal({ 0.8f, 0.6f, 0.2f }, 1.0f);
+	auto&& materialLeft1 = Dielectric(1.5f);
+	auto&& materialLeft2 = Dielectric(1.5f);
+	auto&& materialRight = Metal({ 0.8f, 0.6f, 0.2f }, 0.0f);
 
 	AddObj(Sphere({ 0.0f, 0.0f, -1.0f }, 0.5f, std::move(materialCenter)));
 	AddObj(Sphere({ 0.0f, -100.5f, -1.0f }, 100.0f, std::move(materialGround)));
-	AddObj(Sphere({ -1.0f, 0.0f, -1.0f }, 0.5f, std::move(materialLeft)));
+	AddObj(Sphere({ -1.0f, 0.0f, -1.0f }, 0.5f, std::move(materialLeft1)));
+	AddObj(Sphere({ -1.0f, 0.0f, -1.0f }, -0.4f, std::move(materialLeft2)));
 	AddObj(Sphere({ 1.0f, 0.0f, -1.0f }, 0.5f, std::move(materialRight)));
 }
 
