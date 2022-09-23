@@ -4,13 +4,14 @@
 
 Renderer::Renderer(const SPtr<Window>& win)
 	:
-	mPixelBuffer(Config::sImageHeight* Config::sImageWidth),
+	mPixelBuffer(Config::sImageHeight * Config::sImageWidth),
 	mImageHeight(Config::sImageHeight),
 	mImageWidth(Config::sImageWidth),
 	mWindow(win)
 {
 	mShader = Shader::Create("Res/Shaders/Basic.vt", "Res/Shaders/Basic.fg");
 	mPool = ThreadPool::Create();
+	mScene = Scene::Create();
 
 	RenderCommand::Init();
 	RenderCommand::Viewport(Config::sWindowWidth, Config::sWindowHeight);
@@ -85,12 +86,11 @@ void Renderer::RayTracing(u32 threadIndex)
 		s32 l = mImageHeight - y - 1;
 		for (x = 0; x < mImageWidth; x++)
 		{
-			f32 r = f32(x) / (mImageWidth - 1);
-			f32 g = f32(y) / (mImageHeight - 1);
-			f32 b = 0.25f;
+			f32 u = f32(x) / (mImageWidth - 1);
+			f32 v = f32(y) / (mImageHeight - 1);
 		
 			mPixelBuffer[l * mImageWidth + x].Pos = { f32(x) / (mImageWidth - 1) - 0.5f, f32(y) / (mImageHeight - 1) - 0.5f, 0.0f };
-			mPixelBuffer[l * mImageWidth + x].Color = { r, g, b };
+			mPixelBuffer[l * mImageWidth + x].Color = mScene->ShootRay(u, v);
 		}
 
 		{

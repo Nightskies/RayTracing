@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "VBO.h"
 #include "VAO.h"
+#include "Scene.h"
 
 #include "Core/ThreadPool.h"
 #include "Core/Window.h"
@@ -45,6 +46,7 @@ private:
 	UPtr<Shader> mShader;
 	UPtr<ThreadPool> mPool;
 	SPtr<Window> mWindow;
+	UPtr<Scene> mScene;
 
 	SPtr<VBO> mVBO;
 
