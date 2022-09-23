@@ -14,4 +14,5 @@ public:
 
 	inline static constexpr u32 sSamplesPerPixel = 32u;
 	inline static constexpr f32 sScale = 1.0f / sSamplesPerPixel;
+	inline static constexpr u32 sDepth = 8u;
 };

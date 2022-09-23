@@ -1,7 +1,5 @@
 #pragma once
-#include "Core/Types.h"
-
-#include <glm/glm.hpp>
+#include "Materials/Materials.h"
 
 class LightRay
 {
@@ -12,6 +10,8 @@ public:
 	glm::vec3 At(f32 t) const { return StartPos + t * Direction; }
 
 	void SetFaceNormal();
+
+	std::optional<glm::vec3> Scatter();
 public:
 	glm::vec3 StartPos;
 	glm::vec3 Direction;
@@ -21,4 +21,6 @@ public:
 	f32 MinRoot = 0.001f;
 	f32 MaxRoot = INF;
 	bool FrontFace;
+
+	const Materials* Material;
 };

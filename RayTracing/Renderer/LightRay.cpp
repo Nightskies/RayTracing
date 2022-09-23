@@ -13,3 +13,13 @@ void LightRay::SetFaceNormal()
 		HitNormal = -HitNormal;
 	}
 }
+
+std::optional<glm::vec3> LightRay::Scatter()
+{
+	if (auto attenuation = std::visit([this](const auto& obj) mutable { return obj.Diffusion(*this); }, *Material))
+	{
+		return attenuation;
+	}
+
+	return std::nullopt;
+}

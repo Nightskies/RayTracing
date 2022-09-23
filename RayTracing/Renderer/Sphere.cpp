@@ -1,10 +1,11 @@
 #include "Sphere.h"
 
 
-Sphere::Sphere(const glm::vec3& center, f32 radius)
+Sphere::Sphere(const glm::vec3& center, f32 radius, Materials&& material)
 	:
 	mCenter(center),
-	mRadius(radius)
+	mRadius(radius),
+	mMaterial(std::move(material))
 {}
 
 bool Sphere::Hit(LightRay& r) const
@@ -29,6 +30,7 @@ bool Sphere::Hit(LightRay& r) const
 		r.HitPos = r.At(r.MaxRoot);
 		r.HitNormal = (r.HitPos - mCenter) / mRadius;
 		r.SetFaceNormal();
+		r.Material = &mMaterial;
 
 		return true;
 	}

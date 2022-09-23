@@ -95,7 +95,7 @@ void Renderer::RayTracing(u32 threadIndex)
 			}
 
 			mPixelBuffer[l * mImageWidth + x].Pos = { f32(x) / (mImageWidth - 1) - 0.5f, f32(y) / (mImageHeight - 1) - 0.5f, 0.0f };
-			mPixelBuffer[l * mImageWidth + x].Color = pixelColor * Config::sScale;
+			mPixelBuffer[l * mImageWidth + x].Color = glm::sqrt(pixelColor * Config::sScale);
 		}
 
 		{
