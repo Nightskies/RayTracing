@@ -4,7 +4,10 @@
 
 Scene::Scene()
 {
-	mCamera = Camera::Create(Config::sAspectRatio, 90.0f, glm::vec3(-2.0f, 2.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::vec3 lookfrom = { 3.0f, 3.0f, 2.0f };
+	glm::vec3 lookat = { 0.0f, 0.0f, -1.0f };
+	f32 focusDist = glm::length(lookfrom - lookat);
+	mCamera = Camera::Create(Config::sAspectRatio, 20.0f, focusDist, 2.0f, lookfrom, lookat, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	auto&& materialGround = Lambertian({ 0.8f, 0.8f, 0.0f });
 	auto&& materialCenter = Lambertian({ 0.1f, 0.2f, 0.5f });
