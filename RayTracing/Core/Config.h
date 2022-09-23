@@ -11,4 +11,7 @@ public:
 
 	inline static constexpr u32 sImageWidth = 1200u;
 	inline static constexpr u32 sImageHeight = static_cast<u32>(sImageWidth / sAspectRatio);
+
+	inline static constexpr u32 sSamplesPerPixel = 32u;
+	inline static constexpr f32 sScale = 1.0f / sSamplesPerPixel;
 };

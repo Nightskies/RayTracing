@@ -86,11 +86,16 @@ void Renderer::RayTracing(u32 threadIndex)
 		s32 l = mImageHeight - y - 1;
 		for (x = 0; x < mImageWidth; x++)
 		{
-			f32 u = f32(x) / (mImageWidth - 1);
-			f32 v = f32(y) / (mImageHeight - 1);
-		
+			glm::vec3 pixelColor(0.0f, 0.0f, 0.0f);
+			for (s32 s = 0; s < Config::sSamplesPerPixel; s++)
+			{
+				f32 u = f32(x + Utils::random()) / (mImageWidth - 1);
+				f32 v = f32(y + Utils::random()) / (mImageHeight - 1);
+				pixelColor += mScene->ShootRay(u, v);
+			}
+
 			mPixelBuffer[l * mImageWidth + x].Pos = { f32(x) / (mImageWidth - 1) - 0.5f, f32(y) / (mImageHeight - 1) - 0.5f, 0.0f };
-			mPixelBuffer[l * mImageWidth + x].Color = mScene->ShootRay(u, v);
+			mPixelBuffer[l * mImageWidth + x].Color = pixelColor * Config::sScale;
 		}
 
 		{
